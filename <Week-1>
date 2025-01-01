@@ -1,0 +1,62 @@
+//User function Template for C++
+class Solution{
+    public:
+    vector<long long int> twoOddNum(long long int Arr[], long long int N)  
+    {
+        long long int k=0;
+        for(long long int i=0;i<N;i++)
+        {
+            k=k^Arr[i];
+        }
+        long long int a;
+        for(int i=0;i<32;i++)
+        {
+            if(k&1<<i)
+            {
+                a=i;
+                break;
+            }
+        }
+        long long int x,y;
+        x=0;
+        y=0;
+        for(long long int i=0;i<N;i++)
+        {
+            if(Arr[i]&1<<a)
+            {
+                x=x^Arr[i];
+            }
+            else
+            {
+                y=y^Arr[i];
+            }
+        }
+        vector<long long int>m;
+        m.push_back(max(x,y));
+        m.push_back(min(x,y));
+        return m;
+    }
+};
+
+//{ Driver Code Starts.
+int main()
+{
+    int t;
+    cin>>t;
+    while(t--)
+    {
+        long long int N;
+        cin>>N;
+        long long int Arr[N];
+        for(long int i = 0;i < N;i++)
+        cin>>Arr[i];
+        Solution ob;
+        vector<long long int>ans=ob.twoOddNum(Arr,N);
+        for(long long int i=0;i<ans.size();i++)cout<<ans[i]<<" ";
+        cout<<endl;
+    
+cout << "~" << "\n";
+}
+    return 0;
+}
+// } Driver Code Ends
