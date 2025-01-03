@@ -1,0 +1,31 @@
+vector<int> find3Numbers(vector<int> &arr) {
+    int n = arr.size();
+    vector<int> result;
+
+    for (int i = 2; i < n; i++) {
+        int middle = arr[i];
+
+        int smallest = -1;
+        for (int j = i - 1; j >= 0; j--) {
+            if (arr[j] < middle) {
+                smallest = arr[j];
+                break;
+            }
+        }
+
+        int largest = -1;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] > middle) {
+                largest = arr[j];
+                break;
+            }
+        }
+
+        if (smallest != -1 && largest != -1) {
+            result = {smallest, middle, largest};
+            return result;
+        }
+    }
+
+    return result;
+}
