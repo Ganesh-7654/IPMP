@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int atmostsub(vector<int>&nums,int k)
+    {
+        int l=0;
+        int r=0;
+        int p=0;
+        int count=0;
+        unordered_map<int,int>m;
+        int n=nums.size();
+        while(r<n)
+        {
+            m[nums[r]]++;
+            p=m.size();
+            while(p>k&&l<=r)
+            {
+                m[nums[l]]--;
+                if(m[nums[l]]==0)
+                {
+                    m.erase(nums[l]);
+                }
+                p=m.size();
+                l++;
+            }
+            count+=r-l+1;
+            r++;
+        }
+        return count;
+    }
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        int result=atmostsub(nums,k)-atmostsub(nums,k-1);
+        return result;
+    }
+};
