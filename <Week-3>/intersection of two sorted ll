@@ -1,0 +1,32 @@
+class Solution {
+  public:
+    Node* findIntersection(Node* head1, Node* head2) {
+        // code goes here.
+        Node* temp1=head1;
+        Node* temp2=head2;
+        Node* p=new Node(-1);
+        Node* res=p;
+        while(temp1!=NULL&&temp2!=NULL)
+        {
+            if(temp1->data<temp2->data)
+            {
+                temp1=temp1->next;
+            }
+            else if(temp1->data>temp2->data)
+            {
+                temp2=temp2->next;
+            }
+            else
+            {
+                res->next=temp1;
+                res=res->next;
+                temp1=temp1->next;
+                temp2=temp2->next;
+            }
+        }
+        res->next=NULL;
+        Node* r=p->next;
+        delete p;
+        return r;
+    }
+};
