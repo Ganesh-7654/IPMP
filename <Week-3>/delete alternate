@@ -1,0 +1,31 @@
+class Solution {
+  public:
+    void deleteAlt(struct Node *head) {
+        // Code here
+        if(head==NULL||head->next==NULL)
+        {
+            return;
+        }
+        Node* prev=head;
+        Node* cur=head->next;
+        bool del=true;
+        while(cur!=NULL)
+        {
+            if(del)
+            {
+                Node* nex=cur->next;
+                prev->next=nex;
+                delete cur;
+                cur=nex;
+                del=false;
+            }
+            else
+            {
+                prev=cur;
+                cur=cur->next;
+                del=true;
+            }
+        }
+        return;
+    }
+};
