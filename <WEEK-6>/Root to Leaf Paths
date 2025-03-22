@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void print_paths(node* root, std::vector<int>& path) {
+    if (!root) return;
+
+    path.push_back(root->val);
+
+    if (!root->left && !root->right) {
+        for (int v : path) std::cout << v << " ";
+        std::cout << "\n";
+    } else {
+        print_paths(root->left, path);
+        print_paths(root->right, path);
+    }
+
+    path.pop_back();
+}
+
+void root_to_leaf_paths(node* root) {
+    std::vector<int> path;
+    print_paths(root, path);
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::cout << "Root-to-Leaf Paths:\n";
+    root_to_leaf_paths(root);
+
+    return 0;
+}
