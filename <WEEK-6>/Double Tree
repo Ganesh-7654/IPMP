@@ -1,0 +1,39 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void double_tree(node* root) {
+    if (!root) return;
+
+    double_tree(root->left);
+    double_tree(root->right);
+
+    node* new_node = new node(root->val);
+    new_node->left = root->left;
+    root->left = new_node;
+}
+
+void inorder(node* root) {
+    if (!root) return;
+    inorder(root->left);
+    std::cout << root->val << " ";
+    inorder(root->right);
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+
+    double_tree(root);
+
+    inorder(root);
+    return 0;
+}
