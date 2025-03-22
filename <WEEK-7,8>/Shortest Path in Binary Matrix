@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+struct cell {
+    int x, y, dist;
+    cell(int x, int y, int dist) : x(x), y(y), dist(dist) {}
+};
+
+bool is_valid(int x, int y, int n, std::vector<std::vector<int>>& grid) {
+    return x >= 0 && y >= 0 && x < n && y < n && grid[x][y] == 0;
+}
+
+int shortest_path_binary_matrix(std::vector<std::vector<int>>& grid) {
+    int n = grid.size();
+    if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1) return -1;
+
+    std::queue<cell> q;
+    q.push(cell(0, 0, 1));
+    grid[0][0] = 1;  
+
+    int dx[] = {-1, -1, -1, 0, 1, 1, 1, 0};
+    int dy[] = {-1, 0, 1, 1, 1, 0, -1, -1};
+
+    while (!q.empty()) {
+        cell curr = q.front();
+        q.pop();
+
+        if (curr.x == n - 1 && curr.y == n - 1) return curr.dist;
+
+        for (int i = 0; i < 8; i++) {
+            int nx = curr.x + dx[i], ny = curr.y + dy[i];
+
+            if (is_valid(nx, ny, n, grid)) {
+                q.push(cell(nx, ny, curr.dist + 1));
+                grid[nx][ny] = 1;  
+            }
+        }
+    }
+    return -1;
+}
+
+int main() {
+    std::vector<std::vector<int>> grid = {
+        {0, 0, 0},
+        {1, 1, 0},
+        {1, 1, 0}
+    };
+
+    std::cout << "Shortest Path: " << shortest_path_binary_matrix(grid) << "\n";
+    return 0;
+}
