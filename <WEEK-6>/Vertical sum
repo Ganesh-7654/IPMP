@@ -1,0 +1,47 @@
+#include <iostream>
+#include <map>
+#include <queue>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void vertical_sum(node* root) {
+    if (!root) return;
+
+    std::map<int, int> sum_map;
+    std::queue<std::pair<node*, int>> q;
+    
+    q.push({root, 0});
+
+    while (!q.empty()) {
+        auto [curr, hd] = q.front();
+        q.pop();
+
+        sum_map[hd] += curr->val;
+
+        if (curr->left) q.push({curr->left, hd - 1});
+        if (curr->right) q.push({curr->right, hd + 1});
+    }
+
+    for (auto& [hd, sum] : sum_map)
+        std::cout << "Vertical " << hd << " : " << sum << "\n";
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::cout << "Vertical Sum of Tree:\n";
+    vertical_sum(root);
+
+    return 0;
+}
