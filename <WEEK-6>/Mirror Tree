@@ -1,0 +1,45 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void mirror(node* root) {
+    if (!root) return;
+
+    std::swap(root->left, root->right);
+    mirror(root->left);
+    mirror(root->right);
+}
+
+void inorder(node* root) {
+    if (!root) return;
+    inorder(root->left);
+    std::cout << root->val << " ";
+    inorder(root->right);
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::cout << "Original Inorder: ";
+    inorder(root);
+    std::cout << "\n";
+
+    mirror(root);
+
+    std::cout << "Mirror Inorder: ";
+    inorder(root);
+    std::cout << "\n";
+
+    return 0;
+}
