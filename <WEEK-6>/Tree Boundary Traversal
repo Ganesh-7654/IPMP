@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void left_boundary(node* root, std::vector<int>& result) {
+    if (!root || (!root->left && !root->right)) return;
+    result.push_back(root->val);
+    if (root->left) left_boundary(root->left, result);
+    else left_boundary(root->right, result);
+}
+
+void leaf_nodes(node* root, std::vector<int>& result) {
+    if (!root) return;
+    if (!root->left && !root->right) {
+        result.push_back(root->val);
+        return;
+    }
+    leaf_nodes(root->left, result);
+    leaf_nodes(root->right, result);
+}
+
+void right_boundary(node* root, std::vector<int>& result) {
+    if (!root || (!root->left && !root->right)) return;
+    if (root->right) right_boundary(root->right, result);
+    else right_boundary(root->left, result);
+    result.push_back(root->val);
+}
+
+std::vector<int> boundary_traversal(node* root) {
+    std::vector<int> result;
+    if (!root) return result;
+    
+    result.push_back(root->val);
+    
+    left_boundary(root->left, result);
+    leaf_nodes(root, result);
+    right_boundary(root->right, result);
+    
+    return result;
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+    root->left->right->left = new node(8);
+    root->left->right->right = new node(9);
+
+    std::vector<int> boundary = boundary_traversal(root);
+
+    std::cout << "Boundary Traversal: ";
+    for (int v : boundary) std::cout << v << " ";
+    std::cout << "\n";
+
+    return 0;
+}
