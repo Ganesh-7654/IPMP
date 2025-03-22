@@ -1,0 +1,47 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+node* find_min(node* root) {
+    while (root && root->left) root = root->left;
+    return root;
+}
+
+node* inorder_successor(node* root, node* target) {
+    node* successor = nullptr;
+
+    while (root) {
+        if (target->val < root->val) {
+            successor = root;
+            root = root->left;
+        } else {
+            root = root->right;
+        }
+    }
+    return successor;
+}
+
+int main() {
+    node* root = new node(20);
+    root->left = new node(10);
+    root->right = new node(30);
+    root->left->left = new node(5);
+    root->left->right = new node(15);
+    root->left->right->left = new node(12);
+    root->left->right->right = new node(18);
+
+    node* target = root->left->right; // Node with value 15
+    node* successor = inorder_successor(root, target);
+
+    if (successor)
+        std::cout << "Inorder Successor of " << target->val << " is " << successor->val << "\n";
+    else
+        std::cout << "No Inorder Successor found.\n";
+
+    return 0;
+}
