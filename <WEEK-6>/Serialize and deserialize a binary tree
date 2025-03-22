@@ -1,0 +1,94 @@
+#include <iostream>
+#include <queue>
+#include <sstream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+// Serialize a binary tree to a string
+std::string serialize(node* root) {
+    if (!root) return "N";
+
+    std::queue<node*> q;
+    q.push(root);
+    std::ostringstream out;
+
+    while (!q.empty()) {
+        node* temp = q.front();
+        q.pop();
+
+        if (temp) {
+            out << temp->val << " ";
+            q.push(temp->left);
+            q.push(temp->right);
+        } else {
+            out << "N ";
+        }
+    }
+
+    return out.str();
+}
+
+// Deserialize a string to reconstruct the binary tree
+node* deserialize(const std::string& data) {
+    if (data == "N") return nullptr;
+
+    std::istringstream in(data);
+    std::string val;
+    in >> val;
+
+    node* root = new node(std::stoi(val));
+    std::queue<node*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        node* temp = q.front();
+        q.pop();
+
+        if (!(in >> val)) break;
+        if (val != "N") {
+            temp->left = new node(std::stoi(val));
+            q.push(temp->left);
+        }
+
+        if (!(in >> val)) break;
+        if (val != "N") {
+            temp->right = new node(std::stoi(val));
+            q.push(temp->right);
+        }
+    }
+
+    return root;
+}
+
+// Inorder Traversal (for checking correctness)
+void inorder(node* root) {
+    if (!root) return;
+    inorder(root->left);
+    std::cout << root->val << " ";
+    inorder(root->right);
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::string serialized = serialize(root);
+    std::cout << "Serialized Tree: " << serialized << "\n";
+
+    node* new_root = deserialize(serialized);
+    std::cout << "Inorder Traversal of Deserialized Tree: ";
+    inorder(new_root);
+    std::cout << "\n";
+
+    return 0;
+}
