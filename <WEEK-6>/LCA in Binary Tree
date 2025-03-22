@@ -1,0 +1,39 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+node* find_lca(node* root, int n1, int n2) {
+    if (!root) return nullptr;
+    if (root->val == n1 || root->val == n2) return root;
+
+    node* left_lca = find_lca(root->left, n1, n2);
+    node* right_lca = find_lca(root->right, n1, n2);
+
+    if (left_lca && right_lca) return root;
+    return left_lca ? left_lca : right_lca;
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    int n1 = 4, n2 = 5;
+    node* lca = find_lca(root, n1, n2);
+
+    if (lca)
+        std::cout << "LCA of " << n1 << " and " << n2 << " is " << lca->val << "\n";
+    else
+        std::cout << "No LCA found.\n";
+
+    return 0;
+}
