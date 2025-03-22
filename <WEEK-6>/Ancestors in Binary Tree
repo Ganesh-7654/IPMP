@@ -1,0 +1,36 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+bool find_ancestors(node* root, int target) {
+    if (!root) return false;
+    
+    if (root->val == target) return true;
+
+    if (find_ancestors(root->left, target) || find_ancestors(root->right, target)) {
+        std::cout << root->val << " ";
+        return true;
+    }
+    
+    return false;
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    int target = 5;
+    find_ancestors(root, target);
+
+    return 0;
+}
