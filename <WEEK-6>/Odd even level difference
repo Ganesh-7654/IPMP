@@ -1,0 +1,49 @@
+#include <iostream>
+#include <queue>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+int odd_even_diff(node* root) {
+    if (!root) return 0;
+
+    std::queue<node*> q;
+    q.push(root);
+    int level = 1, odd_sum = 0, even_sum = 0;
+
+    while (!q.empty()) {
+        int count = q.size();
+
+        for (int i = 0; i < count; i++) {
+            node* temp = q.front();
+            q.pop();
+
+            if (level % 2 == 1) odd_sum += temp->val;
+            else even_sum += temp->val;
+
+            if (temp->left) q.push(temp->left);
+            if (temp->right) q.push(temp->right);
+        }
+        level++;
+    }
+
+    return odd_sum - even_sum;
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::cout << "Odd-Even Level Difference: " << odd_even_diff(root) << "\n";
+
+    return 0;
+}
