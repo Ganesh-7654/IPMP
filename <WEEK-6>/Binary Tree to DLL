@@ -1,0 +1,51 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void convert_to_dll(node* root, node*& head, node*& prev) {
+    if (!root) return;
+
+    convert_to_dll(root->left, head, prev);
+
+    if (!prev)
+        head = root;
+    else {
+        prev->right = root;
+        root->left = prev;
+    }
+    prev = root;
+
+    convert_to_dll(root->right, head, prev);
+}
+
+node* tree_to_dll(node* root) {
+    node* head = nullptr, *prev = nullptr;
+    convert_to_dll(root, head, prev);
+    return head;
+}
+
+void print_dll(node* head) {
+    while (head) {
+        std::cout << head->val << " ";
+        head = head->right;
+    }
+    std::cout << "\n";
+}
+
+int main() {
+    node* root = new node(10);
+    root->left = new node(5);
+    root->right = new node(20);
+    root->right->left = new node(15);
+    root->right->right = new node(25);
+
+    node* head = tree_to_dll(root);
+    print_dll(head);
+
+    return 0;
+}
