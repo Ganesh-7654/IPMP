@@ -1,0 +1,42 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* next;
+    node(int v) : val(v), next(nullptr) {}
+};
+
+long long get_number(node* head) {
+    long long num = 0;
+    while (head) {
+        num = num * 10 + head->val;
+        head = head->next;
+    }
+    return num;
+}
+
+long long multiply(node* head1, node* head2) {
+    long long num1 = get_number(head1);
+    long long num2 = get_number(head2);
+    return num1 * num2;
+}
+
+void print(node* head) {
+    while (head) {
+        std::cout << head->val << " ";
+        head = head->next;
+    }
+    std::cout << "\n";
+}
+
+int main() {
+    node* head1 = new node(3);
+    head1->next = new node(4);
+    head1->next->next = new node(5);
+
+    node* head2 = new node(2);
+    head2->next = new node(1);
+
+    std::cout << "Product: " << multiply(head1, head2) << "\n";
+    return 0;
+}
