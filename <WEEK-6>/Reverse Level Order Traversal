@@ -1,0 +1,49 @@
+#include <iostream>
+#include <queue>
+#include <stack>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void reverse_level_order(node* root) {
+    if (!root) return;
+
+    std::queue<node*> q;
+    std::stack<node*> s;
+
+    q.push(root);
+
+    while (!q.empty()) {
+        node* temp = q.front();
+        q.pop();
+        s.push(temp);
+
+        if (temp->right) q.push(temp->right);
+        if (temp->left) q.push(temp->left);
+    }
+
+    while (!s.empty()) {
+        std::cout << s.top()->val << " ";
+        s.pop();
+    }
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::cout << "Reverse Level Order Traversal: ";
+    reverse_level_order(root);
+    std::cout << "\n";
+
+    return 0;
+}
