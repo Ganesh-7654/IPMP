@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void inorder(node* root, std::vector<int>& vals) {
+    if (!root) return;
+    inorder(root->left, vals);
+    vals.push_back(root->val);
+    inorder(root->right, vals);
+}
+
+bool find_pair(node* root, int target) {
+    std::vector<int> vals;
+    inorder(root, vals);
+
+    int left = 0, right = vals.size() - 1;
+    while (left < right) {
+        int sum = vals[left] + vals[right];
+
+        if (sum == target) {
+            std::cout << "Pair Found: (" << vals[left] << ", " << vals[right] << ")\n";
+            return true;
+        } else if (sum < target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    std::cout << "No Pair Found\n";
+    return false;
+}
+
+int main() {
+    node* root = new node(10);
+    root->left = new node(5);
+    root->right = new node(15);
+    root->left->left = new node(2);
+    root->left->right = new node(7);
+    root->right->left = new node(12);
+    root->right->right = new node(18);
+
+    int target = 17;
+    find_pair(root, target);
+
+    return 0;
+}
