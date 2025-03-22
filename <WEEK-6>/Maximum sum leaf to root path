@@ -1,0 +1,66 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+bool max_sum_path_util(node* root, int sum, int target) {
+    if (!root) return false;
+    
+    sum += root->val;
+
+    if (!root->left && !root->right) {
+        if (sum == target) {
+            std::cout << root->val << " ";
+            return true;
+        }
+        return false;
+    }
+
+    if (max_sum_path_util(root->left, sum, target) || max_sum_path_util(root->right, sum, target)) {
+        std::cout << root->val << " ";
+        return true;
+    }
+
+    return false;
+}
+
+int max_sum_leaf_to_root(node* root, int& max_sum) {
+    if (!root) return 0;
+
+    if (!root->left && !root->right) return root->val;
+
+    int left_sum = max_sum_leaf_to_root(root->left, max_sum);
+    int right_sum = max_sum_leaf_to_root(root->right, max_sum);
+
+    int curr_sum = root->val + std::max(left_sum, right_sum);
+    max_sum = std::max(max_sum, curr_sum);
+
+    return curr_sum;
+}
+
+void print_max_sum_path(node* root) {
+    int max_sum = 0;
+    max_sum_leaf_to_root(root, max_sum);
+    std::cout << "Maximum Sum: " << max_sum << "\n";
+    std::cout << "Path: ";
+    max_sum_path_util(root, 0, max_sum);
+    std::cout << "\n";
+}
+
+int main() {
+    node* root = new node(10);
+    root->left = new node(8);
+    root->right = new node(15);
+    root->left->left = new node(4);
+    root->left->right = new node(9);
+    root->right->left = new node(12);
+    root->right->right = new node(20);
+
+    print_max_sum_path(root);
+
+    return 0;
+}
