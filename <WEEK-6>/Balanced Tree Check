@@ -1,0 +1,45 @@
+#include <iostream>
+#include <cmath>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+int check_height(node* root) {
+    if (!root) return 0;
+
+    int left_height = check_height(root->left);
+    if (left_height == -1) return -1;
+
+    int right_height = check_height(root->right);
+    if (right_height == -1) return -1;
+
+    if (std::abs(left_height - right_height) > 1) return -1;
+
+    return std::max(left_height, right_height) + 1;
+}
+
+bool is_balanced(node* root) {
+    return check_height(root) != -1;
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+    root->left->left->left = new node(8); // Adding an extra node to make it unbalanced
+
+    if (is_balanced(root))
+        std::cout << "The tree is balanced.\n";
+    else
+        std::cout << "The tree is not balanced.\n";
+
+    return 0;
+}
