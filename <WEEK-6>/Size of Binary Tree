@@ -1,0 +1,27 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+int size(node* root) {
+    if (!root) return 0;
+    return 1 + size(root->left) + size(root->right);
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::cout << "Size of the Binary Tree: " << size(root) << "\n";
+
+    return 0;
+}
