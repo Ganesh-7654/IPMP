@@ -1,0 +1,36 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+bool is_mirror(node* left, node* right) {
+    if (!left && !right) return true;
+    if (!left || !right) return false;
+
+    return is_mirror(left->left, right->right) &&
+           is_mirror(left->right, right->left);
+}
+
+bool is_foldable(node* root) {
+    if (!root) return true;
+    return is_mirror(root->left, root->right);
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->right->right = new node(5);
+
+    if (is_foldable(root))
+        std::cout << "The tree is foldable.\n";
+    else
+        std::cout << "The tree is not foldable.\n";
+
+    return 0;
+}
