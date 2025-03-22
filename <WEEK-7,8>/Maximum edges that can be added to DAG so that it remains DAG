@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+class Graph {
+    int V;
+    std::vector<std::vector<int>> adj;
+    std::vector<int> topo_order;
+
+public:
+    Graph(int V) : V(V), adj(V) {}
+
+    void add_edge(int u, int v) {
+        adj[u].push_back(v);
+    }
+
+    std::vector<int> topological_sort() {
+        std::vector<int> indegree(V, 0);
+        for (int i = 0; i < V; i++)
+            for (int neighbor : adj[i])
+                indegree[neighbor]++;
+
+        std::queue<int> q;
+        for (int i = 0; i < V; i++)
+            if (indegree[i] == 0) q.push(i);
+
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            topo_order.push_back(node);
+
+            for (int neighbor : adj[node]) {
+                indegree[neighbor]--;
+                if (indegree[neighbor] == 0) q.push(neighbor);
+            }
+        }
+        return topo_order;
+    }
+
+    int max_additional_edges() {
+        std::vector<int> order = topological_sort();
+        std::vector<std::vector<bool>> reachable(V, std::vector<bool>(V, false));
+
+        for (int u = 0; u < V; u++) {
+            std::queue<int> q;
+            q.push(u);
+            reachable[u][u] = true;
+
+            while (!q.empty()) {
+                int node = q.front();
+                q.pop();
+                for (int neighbor : adj[node]) {
+                    if (!reachable[u][neighbor]) {
+                        reachable[u][neighbor] = true;
+                        q.push(neighbor);
+                    }
+                }
+            }
+        }
+
+        int max_edges = 0;
+        for (int i = 0; i < V; i++) {
+            for (int j = i + 1; j < V; j++) {
+                int u = order[i], v = order[j];
+                if (!reachable[u][v]) {
+                    max_edges++;
+                }
+            }
+        }
+        return max_edges;
+    }
+};
+
+int main() {
+    Graph g(5);
+    g.add_edge(0, 1);
+    g.add_edge(1, 2);
+    g.add_edge(2, 3);
+    
+    std::cout << "Maximum additional edges that can be added: " << g.max_additional_edges() << "\n";
+    return 0;
+}
