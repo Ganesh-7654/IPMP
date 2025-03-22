@@ -1,0 +1,40 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+bool are_isomorphic(node* root1, node* root2) {
+    if (!root1 && !root2) return true;
+    if (!root1 || !root2) return false;
+    if (root1->val != root2->val) return false;
+
+    return (are_isomorphic(root1->left, root2->left) && 
+            are_isomorphic(root1->right, root2->right)) ||
+           (are_isomorphic(root1->left, root2->right) && 
+            are_isomorphic(root1->right, root2->left));
+}
+
+int main() {
+    node* root1 = new node(1);
+    root1->left = new node(2);
+    root1->right = new node(3);
+    root1->left->left = new node(4);
+    root1->left->right = new node(5);
+
+    node* root2 = new node(1);
+    root2->left = new node(3);
+    root2->right = new node(2);
+    root2->right->left = new node(5);
+    root2->right->right = new node(4);
+
+    if (are_isomorphic(root1, root2))
+        std::cout << "The trees are isomorphic.\n";
+    else
+        std::cout << "The trees are not isomorphic.\n";
+
+    return 0;
+}
