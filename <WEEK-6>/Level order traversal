@@ -1,0 +1,41 @@
+#include <iostream>
+#include <queue>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void level_order(node* root) {
+    if (!root) return;
+
+    std::queue<node*> q;
+    q.push(root);
+
+    while (!q.empty()) {
+        node* temp = q.front();
+        q.pop();
+        std::cout << temp->val << " ";
+
+        if (temp->left) q.push(temp->left);
+        if (temp->right) q.push(temp->right);
+    }
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+
+    std::cout << "Level Order Traversal: ";
+    level_order(root);
+    std::cout << "\n";
+
+    return 0;
+}
