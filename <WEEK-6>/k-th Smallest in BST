@@ -1,0 +1,43 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void kth_smallest_util(node* root, int& k, int& result) {
+    if (!root || k == 0) return;
+
+    kth_smallest_util(root->left, k, result);
+    
+    k--;
+    if (k == 0) {
+        result = root->val;
+        return;
+    }
+    
+    kth_smallest_util(root->right, k, result);
+}
+
+int kth_smallest(node* root, int k) {
+    int result = -1;
+    kth_smallest_util(root, k, result);
+    return result;
+}
+
+int main() {
+    node* root = new node(5);
+    root->left = new node(3);
+    root->right = new node(7);
+    root->left->left = new node(2);
+    root->left->right = new node(4);
+    root->right->left = new node(6);
+    root->right->right = new node(8);
+
+    int k = 3;
+    std::cout << k << "-th Smallest Element: " << kth_smallest(root, k) << "\n";
+
+    return 0;
+}
