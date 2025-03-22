@@ -1,0 +1,45 @@
+#include <iostream>
+#include <queue>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+int max_width(node* root) {
+    if (!root) return 0;
+
+    std::queue<node*> q;
+    q.push(root);
+    int max_width = 0;
+
+    while (!q.empty()) {
+        int count = q.size();
+        max_width = std::max(max_width, count);
+
+        for (int i = 0; i < count; i++) {
+            node* temp = q.front();
+            q.pop();
+            if (temp->left) q.push(temp->left);
+            if (temp->right) q.push(temp->right);
+        }
+    }
+    return max_width;
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+    root->right->left->left = new node(8);
+
+    std::cout << "Maximum Width of Tree: " << max_width(root) << "\n";
+
+    return 0;
+}
