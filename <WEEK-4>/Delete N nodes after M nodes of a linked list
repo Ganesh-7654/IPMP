@@ -1,0 +1,52 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* next;
+    node(int v) : val(v), next(nullptr) {}
+};
+
+void delete_n_after_m(node* head, int m, int n) {
+    node* curr = head;
+
+    while (curr) {
+        for (int i = 0; i < m - 1 && curr; i++)
+            curr = curr->next;
+
+        if (!curr) return;
+
+        node* temp = curr->next;
+        for (int i = 0; i < n && temp; i++) {
+            node* del = temp;
+            temp = temp->next;
+            delete del;
+        }
+        curr->next = temp;
+        curr = temp;
+    }
+}
+
+void print(node* head) {
+    while (head) {
+        std::cout << head->val << " ";
+        head = head->next;
+    }
+    std::cout << "\n";
+}
+
+int main() {
+    node* head = new node(1);
+    head->next = new node(2);
+    head->next->next = new node(3);
+    head->next->next->next = new node(4);
+    head->next->next->next->next = new node(5);
+    head->next->next->next->next->next = new node(6);
+    head->next->next->next->next->next->next = new node(7);
+    head->next->next->next->next->next->next->next = new node(8);
+
+    int m = 2, n = 2;
+    delete_n_after_m(head, m, n);
+    print(head);
+
+    return 0;
+}
