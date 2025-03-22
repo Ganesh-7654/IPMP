@@ -1,0 +1,38 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+bool has_path_sum(node* root, int sum) {
+    if (!root) return false;
+
+    sum -= root->val;
+
+    if (!root->left && !root->right) return (sum == 0);
+
+    return has_path_sum(root->left, sum) || has_path_sum(root->right, sum);
+}
+
+int main() {
+    node* root = new node(5);
+    root->left = new node(4);
+    root->right = new node(8);
+    root->left->left = new node(11);
+    root->left->left->left = new node(7);
+    root->left->left->right = new node(2);
+    root->right->left = new node(13);
+    root->right->right = new node(4);
+    root->right->right->right = new node(1);
+
+    int sum = 22;
+    if (has_path_sum(root, sum))
+        std::cout << "Path with sum " << sum << " exists.\n";
+    else
+        std::cout << "No path with sum " << sum << " found.\n";
+
+    return 0;
+}
