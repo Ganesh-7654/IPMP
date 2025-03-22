@@ -1,0 +1,42 @@
+#include <iostream>
+
+struct node {
+    int val;
+    node* left;
+    node* right;
+    node(int v) : val(v), left(nullptr), right(nullptr) {}
+};
+
+void left_view_util(node* root, int level, int& max_level) {
+    if (!root) return;
+
+    if (level > max_level) {
+        std::cout << root->val << " ";
+        max_level = level;
+    }
+
+    left_view_util(root->left, level + 1, max_level);
+    left_view_util(root->right, level + 1, max_level);
+}
+
+void left_view(node* root) {
+    int max_level = -1;
+    left_view_util(root, 0, max_level);
+}
+
+int main() {
+    node* root = new node(1);
+    root->left = new node(2);
+    root->right = new node(3);
+    root->left->left = new node(4);
+    root->left->right = new node(5);
+    root->right->left = new node(6);
+    root->right->right = new node(7);
+    root->left->left->left = new node(8);
+
+    std::cout << "Left View: ";
+    left_view(root);
+    std::cout << "\n";
+
+    return 0;
+}
