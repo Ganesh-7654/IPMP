@@ -1,0 +1,65 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+class Solution {
+    vector<vector<int>> directions = {
+        {}, 
+        {{0, -1}, {0, 1}},    
+        {{-1, 0}, {1, 0}},    
+        {{0, -1}, {1, 0}},    
+        {{0, 1}, {1, 0}},     
+        {{0, -1}, {-1, 0}},   
+        {{0, 1}, {-1, 0}}     
+    };
+
+    bool canConnect(int curr, int next, int dr, int dc) {
+        vector<vector<int>> validConnections = {
+            {}, 
+            {1, 3, 5}, {2, 5, 6}, {1, 4, 6}, 
+            {1, 3, 5}, {2, 3, 4}, {2, 4, 6}
+        };
+        
+        int nextR = dr == 1 ? 2 : (dr == -1 ? 5 : (dc == 1 ? 4 : 3));
+        return find(validConnections[nextR].begin(), validConnections[nextR].end(), next) != validConnections[nextR].end();
+    }
+
+public:
+    bool hasValidPath(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        queue<pair<int, int>> q;
+        q.push({0, 0});
+        visited[0][0] = true;
+
+        while (!q.empty()) {
+            auto [r, c] = q.front();
+            q.pop();
+
+            if (r == n - 1 && c == m - 1) return true;
+
+            for (auto [dr, dc] : directions[grid[r][c]]) {
+                int nr = r + dr, nc = c + dc;
+                if (nr >= 0 && nr < n && nc >= 0 && nc < m && !visited[nr][nc] && canConnect(grid[r][c], grid[nr][nc], dr, dc)) {
+                    visited[nr][nc] = true;
+                    q.push({nr, nc});
+                }
+            }
+        }
+        return false;
+    }
+};
+
+int main() {
+    vector<vector<int>> grid = {
+        {2, 4, 3},
+        {6, 5, 2}
+    };
+
+    Solution sol;
+    cout << (sol.hasValidPath(grid) ? "Valid Path Exists" : "No Valid Path") << endl;
+
+    return 0;
+}
