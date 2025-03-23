@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+    int n, m;
+    vector<vector<int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    bool dfs(vector<vector<int>>& grid, int r, int c) {
+        if (r < 0 || r >= n || c < 0 || c >= m) return false;
+        if (grid[r][c] == 1) return true;
+
+        grid[r][c] = 1;
+        bool isClosed = true;
+        
+        for (auto& d : directions)
+            isClosed &= dfs(grid, r + d[0], c + d[1]);
+
+        return isClosed;
+    }
+
+public:
+    int closedIsland(vector<vector<int>>& grid) {
+        n = grid.size(), m = grid[0].size();
+        int count = 0;
+
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++)
+                if (grid[i][j] == 0 && dfs(grid, i, j))
+                    count++;
+
+        return count;
+    }
+};
+
+int main() {
+    vector<vector<int>> grid = {
+        {1, 1, 1, 1, 0, 1, 1, 1},
+        {1, 0, 1, 1, 0, 1, 1, 1},
+        {1, 0, 0, 1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1, 1, 1, 1}
+    };
+
+    Solution sol;
+    cout << sol.closedIsland(grid) << endl;
+
+    return 0;
+}
