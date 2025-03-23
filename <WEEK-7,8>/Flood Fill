@@ -1,0 +1,49 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class Solution {
+    int n, m;
+    vector<vector<int>> directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    void dfs(vector<vector<int>>& image, int r, int c, int color, int newColor) {
+        if (r < 0 || r >= n || c < 0 || c >= m || image[r][c] != color)
+            return;
+
+        image[r][c] = newColor;
+
+        for (auto& d : directions)
+            dfs(image, r + d[0], c + d[1], color, newColor);
+    }
+
+public:
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
+        n = image.size(), m = image[0].size();
+        int color = image[sr][sc];
+
+        if (color != newColor)
+            dfs(image, sr, sc, color, newColor);
+
+        return image;
+    }
+};
+
+int main() {
+    vector<vector<int>> image = {
+        {1, 1, 0},
+        {1, 1, 0},
+        {0, 0, 2}
+    };
+    int sr = 1, sc = 1, newColor = 3;
+
+    Solution sol;
+    vector<vector<int>> result = sol.floodFill(image, sr, sc, newColor);
+
+    for (const auto& row : result) {
+        for (int cell : row) cout << cell << " ";
+        cout << endl;
+    }
+
+    return 0;
+}
